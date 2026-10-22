@@ -1,0 +1,48 @@
+{
+  "name": "@voidrift/plugin-retrieval",
+  "version": "0.1.0",
+  "description": "VoidRift Retrieval — vector, hybrid, and knowledge-graph search over the workspace, surfaced within the context budget as data.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest --run"
+  },
+  "peerDependencies": {
+    "@voidrift/core": "^0.1.0",
+    "zod": "*"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@voidrift/core": "^0.1.0",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3",
+    "zod": "4.6.5"
+  },
+  "voidrift": {
+    "kind": "plugin",
+    "plugin": true,
+    "description": "Vector, hybrid, and knowledge-graph retrieval over the workspace behind pluggable embeddings/vector-store ports; surfaces ranked snippets within the head budget and gated read-only tools (retrieval-blueprint §1)."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TylerJPresley/voidrift-plugin-retrieval.git"
+  }
+}
