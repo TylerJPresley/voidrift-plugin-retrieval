@@ -17,6 +17,7 @@ import { contentHash } from "./indexer.js";
 class FakeWorkspace implements WorkspaceSurface {
   readonly corpus = new Map<string, string>();
   readonly reads = new Map<string, number>();
+  readonly hashCache = new Map<string, string>();
   input = "";
   focus: string[] = [];
   /** Names the surface pretends are binary (NUL) — never readable. */
@@ -30,13 +31,21 @@ class FakeWorkspace implements WorkspaceSurface {
     const text = this.corpus.get(path);
     if (text === undefined) return null;
     this.reads.set(path, (this.reads.get(path) ?? 0) + 1);
-    return { text, hash: contentHash(text) };
+    const hash = contentHash(text);
+    this.hashCache.set(path, hash);
+    return { text, hash };
   }
   currentInput(): string {
     return this.input;
   }
   focusPaths(): string[] {
     return this.focus;
+  }
+  cacheDir(namespace: string): string {
+    return `/tmp/.voidrift/cache/${namespace}`;
+  }
+  hashFor(path: string): string | null {
+    return this.hashCache.get(path) ?? null;
   }
 }
 
