@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "@voidrift/core": "^0.1.0",
-    "zod": "*"
+    "zod": "^4.6.0"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
