@@ -227,7 +227,7 @@ describe("gated read-only tools, honest fallback (§9, invariant 6)", () => {
     const retriever = new Retriever(embeddings, store);
     const { exec } = searchTool(retriever, store, { mode: "hybrid", k: 5 });
     const result = await exec({ query: "anything" }, { workspaceRoot: "/w", sessionId: "s" });
-    expect(result.content).toContain("search_contents");
+    expect(result.content).toContain("search_files");
     expect((result.artifact as { hits: unknown[] }).hits).toHaveLength(0);
   });
 });
@@ -244,7 +244,7 @@ describe("knowledge-graph mode (§6)", () => {
 
     const { exec } = relatedTool(graph, { depth: 2 });
     const miss = await exec({ seed: "doesNotExist" }, { workspaceRoot: "/w", sessionId: "s" });
-    expect(miss.content).toContain("search_contents");
+    expect(miss.content).toContain("search_files");
   });
 });
 

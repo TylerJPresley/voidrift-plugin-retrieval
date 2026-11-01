@@ -6,7 +6,7 @@
  * (e.g. a `tool` rule `retrieval_*`). Each schema
  * is defined once in Zod, the single source for registration and validation
  * (core §8.1). A query that cannot run (empty index, graph seed missing) returns a
- * STRUCTURED result pointing at the lexical `search_contents` fallback — never a
+ * STRUCTURED result pointing at the lexical `search_files` fallback — never a
  * fabricated hit (invariant 6). A result never reads a file into context; the
  * model reads a returned path through the gated read tool (§9).
  */
@@ -27,7 +27,7 @@ export const relatedSchema = z.object({
   depth: z.number().int().positive().max(5).optional(),
 });
 
-const LEXICAL_FALLBACK = "Index cannot answer; use the always-available lexical tool `search_contents` (core §8).";
+const LEXICAL_FALLBACK = "Index cannot answer; use the always-available lexical tool `search_files` (core §8).";
 
 /** `retrieval_search` — semantic or hybrid search over the index (§9). */
 export function searchTool(
@@ -45,12 +45,12 @@ export function searchTool(
   const exec: ToolExecutor = async (args): Promise<ToolResult> => {
     const { query, mode, k } = searchSchema.parse(args);
     if ((await store.count()) === 0) {
-      return { content: LEXICAL_FALLBACK, status: "success", artifact: { hits: [], fallback: "search_contents" } };
+      return { content: LEXICAL_FALLBACK, status: "success", artifact: { hits: [], fallback: "search_files" } };
     }
     const resolvedMode = mode ?? (defaults.mode === "graph" ? "hybrid" : defaults.mode);
     const hits = await retriever.search(resolvedMode, query, k ?? defaults.k);
     if (hits.length === 0) {
-      return { content: LEXICAL_FALLBACK, status: "success", artifact: { hits: [], fallback: "search_contents" } };
+      return { content: LEXICAL_FALLBACK, status: "success", artifact: { hits: [], fallback: "search_files" } };
     }
     const lines = hits.map(
       (h) => `${h.path} (score ${h.score.toFixed(3)}, ${h.trust}, ${h.contentHash.slice(0, 12)})\n${h.snippet}`,
@@ -79,7 +79,7 @@ export function relatedTool(
       return {
         content: `No graph entity matched seed "${seed}". ${LEXICAL_FALLBACK}`,
         status: "success",
-        artifact: { nodes: [], edges: [], fallback: "search_contents" },
+        artifact: { nodes: [], edges: [], fallback: "search_files" },
       };
     }
     const edgeLines = edges.map((e) => `${e.from} --${e.kind}--> ${e.to}`);

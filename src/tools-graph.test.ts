@@ -26,7 +26,7 @@ describe("retrieval_related renders matched entities as data (§9)", () => {
     expect(artifact.nodes.length).toBeGreaterThan(0);
     expect(artifact.edges.length).toBeGreaterThan(0);
     // It is data, not a fallback: no lexical-fallback pointer when there is a hit.
-    expect(res.content).not.toContain("search_contents");
+    expect(res.content).not.toContain("search_files");
   });
 
   it("honours an explicit depth override", async () => {
